@@ -1,0 +1,31 @@
+<header>
+  <div class="navbar navbar-dark bg-dark box-shadow">
+    <div class="container d-flex justify-content-between">
+      <a href="#" class="navbar-brand d-flex align-items-center">
+        <img src="/assets/check-list-icon.svg" height="30px">
+        <strong>&nbsp; Angular Todo List example</strong>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
+        aria-controls="navbarHeader" aria-expanded="true" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main role="main">
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+</main>
+
+<footer class="text-muted">
+  <div class="container">
+    <p class="float-right">
+    </p>
+    <p>© Br1ck$tealer, {{copyrightYear}}</p>
+  </div>
+</footer>
