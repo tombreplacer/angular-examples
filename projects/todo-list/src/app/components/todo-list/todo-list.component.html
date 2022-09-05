@@ -1,8 +1,8 @@
 <section class="vh-100">
-  <div class="container py-5 h-100">
+  <div class="container py-5">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col col-xl-10">
-
+        <button (click)="deleteAll()" type="submit" class="btn btn-danger btn-lg w-100">Удалить все</button>
         <div class="card" style="border-radius: 15px;">
           <div class="card-body p-5">
 
@@ -16,13 +16,23 @@
             </div>
 
             <ul class="list-group mb-0">
-              <app-todo-item *ngFor="let item of todos" [todo]="item"></app-todo-item>
+              <app-todo-item *ngFor="let item of todos" (todoRemoved)="onDeleted($event)" [todo]="item"></app-todo-item>
             </ul>
-
           </div>
+
         </div>
 
       </div>
+
     </div>
+
+
+
   </div>
 </section>
+
+<!-- <div aria-live="polite" aria-atomic="true"> -->
+  <div style="position: fixed; top: 10px; right: 10px;">
+    <app-todo-toast *ngFor="let item of toasts" [message]="item"></app-todo-toast>
+  </div>
+<!-- </div> -->

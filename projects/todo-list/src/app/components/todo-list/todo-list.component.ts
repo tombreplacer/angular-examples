@@ -12,24 +12,52 @@ export class TodoListComponent implements OnInit, OnDestroy {
   todos: Todo[];
 
   newTodo: string;
+  toasts: string[] = []
 
   private subs: Subscription[] = [];
 
   constructor(private todoService: TodoService) { }
 
   ngOnInit(): void {
-    this.subs.push(this.todoService
-      .getTodos()
-      .subscribe(res => this.todos = res));
+    this.getList();
   }
 
   ngOnDestroy(): void {
     this.subs.forEach(e => e.unsubscribe());
   }
 
+  getList() {
+    this.todoService.list().subscribe(res => this.todos = res);
+  }
+
   add() {
-    this.todoService.addTodo({ isCompleted: false, title: this.newTodo }).subscribe(result => {
-      this.todos.push(result)
+    if (!this.newTodo) {
+      return;
+    }
+    this.todoService.add({ isCompleted: false, title: this.newTodo }).subscribe(() => {
+      this.newTodo = '';
+      this.getList();
     });
+  }
+
+  onDeleted(event: Todo) {
+    this.showToast(event.title);
+    this.getList();
+  }
+
+  deleteAll() {
+    this.todos.forEach(e => {
+      if (e.id) {
+        this.todoService.delete(e.id)
+          .subscribe(() => {
+            this.onDeleted(e);
+          })
+      }
+    })
+  }
+
+  showToast(title: string) {
+    this.toasts.push(`Удален todo: ${title}`);
+    setTimeout(() => this.toasts.shift(), 3000);
   }
 }

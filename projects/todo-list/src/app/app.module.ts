@@ -11,12 +11,14 @@ import { TodoItemComponent } from './components/todo-item/todo-item.component';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
 import { InMemoryDataService } from './services/in-memory-data.service';
 import { TodoService } from './services/todo.service';
+import { TodoToastComponent } from './components/todo-toast/todo-toast.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TodoItemComponent,
-    TodoListComponent
+    TodoListComponent,
+    TodoToastComponent
   ],
   imports: [
     BrowserModule,
@@ -24,9 +26,9 @@ import { TodoService } from './services/todo.service';
     HttpClientModule,
     FontAwesomeModule,
     FormsModule,
-    HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, { dataEncapsulation: false }
-    )
+    // HttpClientInMemoryWebApiModule.forRoot(
+    //   InMemoryDataService, { dataEncapsulation: false }
+    // )
   ],
   providers: [TodoService],
   bootstrap: [AppComponent]

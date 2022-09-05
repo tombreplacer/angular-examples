@@ -1,3 +1,11 @@
 .todo-completed {
   text-decoration: line-through;
 }
+
+.delete-btn {
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  color: firebrick;
+}

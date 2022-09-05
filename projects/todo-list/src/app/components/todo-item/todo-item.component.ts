@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Todo } from '../../models/todo';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { TodoService } from '../../services/todo.service';
 
 @Component({
   selector: 'app-todo-item',
@@ -14,12 +15,27 @@ export class TodoItemComponent implements OnInit {
   @Input()
   todo: Todo;
 
-  constructor() { }
+  @Output()
+  todoRemoved: EventEmitter<Todo> = new EventEmitter<Todo>(false);
 
-  ngOnInit(): void {
+  constructor(private todoService: TodoService) {
+
   }
 
-  updateTodo() {
+  ngOnInit(): void {
 
+  }
+
+  toggleCompleted(event: any) {
+    this.todo.isCompleted = event.target.checked;
+    this.todoService.update(this.todo).subscribe();
+  }
+
+  delete() {
+    if(this.todo.id) {
+      this.todoService.delete(this.todo.id).subscribe(r => {
+        this.todoRemoved.emit(this.todo);
+       });
+    }
   }
 }

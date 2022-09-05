@@ -6,7 +6,7 @@ import { Todo } from '../models/todo';
 
 @Injectable()
 export class TodoService {
-  private todosUrl = 'api/todos';  // URL to web api
+  private todosUrl = 'http://localhost:5000/todo';  // URL to web api
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -15,7 +15,7 @@ export class TodoService {
   constructor(
     private http: HttpClient) { }
 
-  getTodos(): Observable<Todo[]> {
+  list(): Observable<Todo[]> {
     return this.http.get<Todo[]>(this.todosUrl)
       .pipe(
         tap(_ => console.log('fetched todos')),
@@ -23,7 +23,7 @@ export class TodoService {
       );
   }
 
-  getTodo(id: number): Observable<Todo> {
+  get(id: number): Observable<Todo> {
     const url = `${this.todosUrl}/${id}`;
     return this.http.get<Todo>(url).pipe(
       tap(_ => this.log(`fetched todo id=${id}`)),
@@ -31,19 +31,28 @@ export class TodoService {
     );
   }
 
-  addTodo(todo: Todo) {
+  add(todo: Todo) {
     return this.http.post<Todo>(this.todosUrl, todo, this.httpOptions).pipe(
       tap((newTodo: Todo) => this.log(`added todo w/ id=${newTodo.id}`)),
       catchError(this.handleError<Todo>('addTodo'))
     );
   }
 
-  updateTodo(todo: Todo) {
+  update(todo: Todo) {
     return this.http.put(this.todosUrl, todo, this.httpOptions).pipe(
       tap(_ => this.log(`updated todo id=${todo.id}`)),
       catchError(this.handleError<any>('updateTodo'))
     );
   }
+
+  delete(id: number) {
+    const url = `${this.todosUrl}/${id}`;
+    return this.http.delete(url).pipe(
+      tap(_ => this.log(`deleted todo id=${id}`)),
+      catchError(this.handleError<any>('updateTodo'))
+    );
+  }
+
 
   private log(message: string) {
     console.log(`TodoService: ${message}`);
