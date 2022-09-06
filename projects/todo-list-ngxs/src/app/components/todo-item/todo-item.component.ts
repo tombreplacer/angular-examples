@@ -29,6 +29,6 @@ export class TodoItemComponent implements OnInit {
   }
 
   delete() {
-    this.store.dispatch(new DeleteTodo(this.todo.id));
+    this.store.dispatch(new DeleteTodo(this.todo));
   }
 }

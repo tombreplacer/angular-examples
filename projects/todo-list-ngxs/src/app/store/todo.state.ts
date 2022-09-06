@@ -24,7 +24,7 @@ export class ListTodos {
 export class DeleteTodo {
   static readonly type = '[Todo] DeleteTodo';
 
-  constructor(public id: number) { }
+  constructor(public todo: Todo) { }
 }
 
 
@@ -62,7 +62,7 @@ export class TodoState {
           const state = ctx.getState();
           ctx.patchState({
             isLoading: false,
-            todos: [ ...state.todos, action.todo]
+            todos: [ ...state.todos, res]
           });
         }),
         mergeMap(() => ctx.dispatch([]))
@@ -108,16 +108,16 @@ export class TodoState {
   @Action(DeleteTodo, { cancelUncompleted: false })
   deleteTodo(ctx: StateContext<TodoStateModel>, action: DeleteTodo) {
     ctx.patchState({ isLoading: true })
-    return this.todoService.delete(action.id)
+    return this.todoService.delete(action.todo.id)
       .pipe(
         tap((res) => {
           const state = ctx.getState();
           ctx.patchState({
             isLoading: false,
-            todos: state.todos.filter((e) => e.id != action.id)
+            todos: state.todos.filter((e) => e.id != action.todo.id)
           })
         }),
-        mergeMap(() => ctx.dispatch([new AddToast(action.id.toString())]))
+        mergeMap(() => ctx.dispatch([new AddToast(action.todo.title)]))
       )
   }
 

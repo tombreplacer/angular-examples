@@ -57,7 +57,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
     this.todos.forEach(e => {
       if (e.id) {
         // this.store.dispatch(new AddToast(e.title));
-        this.store.dispatch(new DeleteTodo(e.id));
+        this.store.dispatch(new DeleteTodo(e));
 
         // this.store.dispatch(new DeleteTodo(e.id)).subscribe({
         //   next: () => this.store.dispatch(new AddToast(e.title))
