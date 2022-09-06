@@ -1,0 +1,40 @@
+<section class="vh-100">
+  <div class="container py-5">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
+        <button (click)="deleteAll()" type="submit" class="btn btn-danger btn-lg w-100">Удалить все</button>
+        <div class="card" style="border-radius: 15px;">
+          <div class="card-body p-5">
+
+            <h4 class="mb-3">Список дел</h4>
+
+            <div class="d-flex justify-content-center align-items-center mb-4">
+              <div class="form-outline flex-fill">
+                <input [(ngModel)]="newTodo" [attr.disabled]="(isLoading$ | async)?'disabled':null"  type="text" id="form3" class="form-control form-control-lg" placeholder="Что вы планируете сегодня?">
+              </div>
+              <button (click)="add()" [disabled]="isLoading$ | async" type="submit" class="btn btn-primary btn-lg ms-3">
+                <div *ngIf="isLoading$ | async">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span>Думаю...</span>
+                </div>
+                <div *ngIf="!(isLoading$ | async)">
+                  <span class="">Добавить</span>
+                </div>
+              </button>
+            </div>
+
+            <ul class="list-group mb-0">
+              <app-todo-item *ngFor="let item of todos$ | async" [todo]="item"></app-todo-item>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div aria-live="polite" aria-atomic="true"> -->
+  <div style="position: fixed; top: 10px; right: 10px;">
+    <app-todo-toast *ngFor="let item of toasts$ | async" [message]="item"></app-todo-toast>
+  </div>
+</div>

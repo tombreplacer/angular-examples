@@ -14,6 +14,8 @@ export class TodoListComponent implements OnInit, OnDestroy {
   newTodo: string;
   toasts: string[] = []
 
+  lockUI = false;
+
   private subs: Subscription[] = [];
 
   constructor(private todoService: TodoService) { }
@@ -34,10 +36,12 @@ export class TodoListComponent implements OnInit, OnDestroy {
     if (!this.newTodo) {
       return;
     }
+    this.lockUI = true;
     this.todoService.add({ isCompleted: false, title: this.newTodo }).subscribe(() => {
       this.newTodo = '';
       this.getList();
     });
+    this.lockUI = false;
   }
 
   onDeleted(event: Todo) {

@@ -33,7 +33,7 @@ export class TodoService {
 
   add(todo: Todo) {
     return this.http.post<Todo>(this.todosUrl, todo, this.httpOptions).pipe(
-      tap((newTodo: Todo) => this.log(`added todo w/ id=${newTodo.id}`)),
+      // tap((newTodo: Todo) => this.log(`added todo w/ id=${newTodo.id}`)),
       catchError(this.handleError<Todo>('addTodo'))
     );
   }
@@ -49,7 +49,7 @@ export class TodoService {
     const url = `${this.todosUrl}/${id}`;
     return this.http.delete(url).pipe(
       tap(_ => this.log(`deleted todo id=${id}`)),
-      catchError(this.handleError<any>('updateTodo'))
+      catchError(this.handleError<any>('deleteTodo'))
     );
   }
 
