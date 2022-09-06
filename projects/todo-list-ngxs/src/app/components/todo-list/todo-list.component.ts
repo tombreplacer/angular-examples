@@ -4,7 +4,7 @@ import { Todo } from '../../models/todo';
 import { TodoService } from '../../services/todo.service';
 import { AddTodo, DeleteTodo, ListTodos, TodoState } from '../../store/todo.state';
 import { Select, Store } from '@ngxs/store';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, tap, mergeMap, switchMap, mergeAll, from, of, map, debounce, debounceTime } from 'rxjs';
 import { AddToast, ToastState } from '../../store/toast.state';
 
 @Component({
@@ -53,15 +53,16 @@ export class TodoListComponent implements OnInit, OnDestroy {
   }
 
   deleteAll() {
-    let observableBatch: Observable<void>[] = [];
+    console.log(this.todos);
     this.todos.forEach(e => {
       if (e.id) {
-        console.log(e);
-        observableBatch.push(this.store.dispatch(new DeleteTodo(e.id)))
-        observableBatch.push(this.store.dispatch(new AddToast(e.title)))
-      }
-    })
+        // this.store.dispatch(new AddToast(e.title));
+        this.store.dispatch(new DeleteTodo(e.id));
 
-    forkJoin(observableBatch).subscribe();
+        // this.store.dispatch(new DeleteTodo(e.id)).subscribe({
+        //   next: () => this.store.dispatch(new AddToast(e.title))
+        // });
+      }
+    });
   }
 }

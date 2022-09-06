@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
-import { State, StateToken, StateContext, Action, Selector } from '@ngxs/store';
+import { State, StateToken, StateContext, Action, Selector, Store } from '@ngxs/store';
 import { Todo } from "projects/todo-list-ngxs/src/app/models/todo";
 import { TodoService } from "../services/todo.service";
 import { tap, mergeMap } from 'rxjs/operators'
 import { append, patch, updateItem } from '@ngxs/store/operators';
+import { AddToast } from "./toast.state";
 
 
 // const TODO_STATE_TOKEN = new StateToken<{}>('todo');
@@ -50,7 +51,7 @@ export interface TodoStateModel {
 
 @Injectable()
 export class TodoState {
-  constructor(private todoService: TodoService) { }
+  constructor(private todoService: TodoService, private store: Store) { }
 
   @Action(AddTodo, { cancelUncompleted: true })
   addTodo(ctx: StateContext<TodoStateModel>, action: AddTodo) {
@@ -76,7 +77,7 @@ export class TodoState {
           const state = ctx.getState();
           ctx.patchState({
             ...state,
-            todos: state.todos.map(item => {
+            todos: state.todos.map((item) => {
               if(item.id === action.todo.id) {
                 return {...item, ...action.newState};
               }
@@ -104,29 +105,30 @@ export class TodoState {
       )
   }
 
-  @Action(DeleteTodo, { cancelUncompleted: true })
+  @Action(DeleteTodo, { cancelUncompleted: false })
   deleteTodo(ctx: StateContext<TodoStateModel>, action: DeleteTodo) {
+    ctx.patchState({ isLoading: true })
     return this.todoService.delete(action.id)
       .pipe(
         tap((res) => {
           const state = ctx.getState();
           ctx.patchState({
-            ...state,
-            todos: state.todos.filter((e)=>e.id != action.id)
-          });
+            isLoading: false,
+            todos: state.todos.filter((e) => e.id != action.id)
+          })
         }),
-        // mergeMap(() => ctx.dispatch([]))
+        mergeMap(() => ctx.dispatch([new AddToast(action.id.toString())]))
       )
   }
 
-    // Selectors
-    @Selector()
-    static todos(state: TodoStateModel): Todo[] {
-      return state.todos;
-    }
+  // Selectors
+  @Selector()
+  static todos(state: TodoStateModel): Todo[] {
+    return state.todos;
+  }
 
-    @Selector()
-    static isLoading(state: TodoStateModel): boolean {
-      return state.isLoading;
-    }
+  @Selector()
+  static isLoading(state: TodoStateModel): boolean {
+    return state.isLoading;
+  }
 }

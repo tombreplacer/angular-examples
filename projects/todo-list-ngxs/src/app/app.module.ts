@@ -16,6 +16,7 @@ import { TodoState } from './store/todo.state';
 import { NgxsModule } from '@ngxs/store'
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { environment } from '../environments/environment';
+import { ToastState } from './store/toast.state';
 
 
 @NgModule({
@@ -31,9 +32,9 @@ import { environment } from '../environments/environment';
     HttpClientModule,
     FontAwesomeModule,
     FormsModule,
-    NgxsModule.forRoot([TodoState], {
-      developmentMode: true
-    }),
+    NgxsModule.forRoot(),
+    NgxsModule.forFeature([TodoState]),
+    NgxsModule.forFeature([ToastState]),
     NgxsReduxDevtoolsPluginModule.forRoot()
   ],
   providers: [TodoService],

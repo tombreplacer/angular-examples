@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { State, StateToken, StateContext, Action, Selector } from '@ngxs/store';
-import { tap, mergeMap } from 'rxjs/operators'
+import { State, StateToken, StateContext, Action, Selector, Store } from '@ngxs/store';
+import { tap, mergeMap, debounceTime, auditTime } from 'rxjs/operators'
 import { append, patch, updateItem } from '@ngxs/store/operators';
 import { of } from "rxjs";
 
@@ -9,6 +9,12 @@ export class AddToast {
   static readonly type = '[Toast] AddToast';
 
   constructor(public toast: string) { }
+}
+
+export class DeleteFirstToast {
+  static readonly type = '[Toast] DeleteFirstToast';
+
+  constructor() { }
 }
 
 export interface ToastStateModel {
@@ -25,15 +31,28 @@ export interface ToastStateModel {
 
 @Injectable()
 export class ToastState {
-  constructor() { }
+  constructor(private store: Store) { }
 
-  @Action(AddToast, { cancelUncompleted: true })
+  @Action(AddToast, { cancelUncompleted: false })
   addToast(ctx: StateContext<ToastStateModel>, action: AddToast) {
     const state = ctx.getState();
-    ctx.patchState({toasts: [...state.toasts, action.toast]});
+    ctx.patchState({ toasts: [...state.toasts, action.toast] });
     return of(state.toasts)
       .pipe(
-        mergeMap(() => ctx.dispatch([]))
+        auditTime(3000),
+        mergeMap(() => ctx.dispatch([new DeleteFirstToast()]))
+      )
+  }
+
+  @Action(DeleteFirstToast, { cancelUncompleted: false })
+  deleteFirstToast(ctx: StateContext<ToastStateModel>, action: DeleteFirstToast) {
+    const state = ctx.getState();
+
+    const [firstElement, ...restArr] = state.toasts;
+    ctx.patchState({ toasts: restArr });
+    return of(state.toasts)
+      .pipe(
+        // mergeMap(() => ctx.dispatch([]))
       )
   }
 
