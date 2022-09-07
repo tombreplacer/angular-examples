@@ -5,6 +5,7 @@ import { TodoService } from "../services/todo.service";
 import { tap, mergeMap } from 'rxjs/operators'
 import { append, patch, updateItem } from '@ngxs/store/operators';
 import { AddToast } from "./toast.state";
+import { Toast, ToastType } from "../models/toast";
 
 
 // const TODO_STATE_TOKEN = new StateToken<{}>('todo');
@@ -65,7 +66,7 @@ export class TodoState {
             todos: [ ...state.todos, res]
           });
         }),
-        mergeMap(() => ctx.dispatch([]))
+        mergeMap(() => ctx.dispatch([new AddToast(new Toast(`Добавлена запись: ${action.todo.title}`, ToastType.Create))]))
       )
   }
 
@@ -85,7 +86,7 @@ export class TodoState {
             })
           });
         }),
-        mergeMap(() => ctx.dispatch([]))
+        mergeMap(() => ctx.dispatch([new AddToast(new Toast(`Обновлена запись: ${action.todo.title}`, ToastType.Update))]))
       )
   }
 
@@ -117,7 +118,7 @@ export class TodoState {
             todos: state.todos.filter((e) => e.id != action.todo.id)
           })
         }),
-        mergeMap(() => ctx.dispatch([new AddToast(action.todo.title)]))
+        mergeMap(() => ctx.dispatch([new AddToast(new Toast(`Удалена запись: ${action.todo.title}`, ToastType.Delete))]))
       )
   }
 

@@ -3,12 +3,13 @@ import { State, StateToken, StateContext, Action, Selector, Store } from '@ngxs/
 import { tap, mergeMap, debounceTime, auditTime } from 'rxjs/operators'
 import { append, patch, updateItem } from '@ngxs/store/operators';
 import { of } from "rxjs";
+import { Toast } from "../models/toast";
 
 
 export class AddToast {
   static readonly type = '[Toast] AddToast';
 
-  constructor(public toast: string) { }
+  constructor(public toast: Toast) { }
 }
 
 export class DeleteFirstToast {
@@ -18,13 +19,13 @@ export class DeleteFirstToast {
 }
 
 export interface ToastStateModel {
-  toasts: string[];
+  toasts: Toast[];
 }
 
 @State<ToastStateModel>({
   name: 'toast',
   defaults: {
-    toasts: [] as string[]
+    toasts: [] as Toast[]
   }
 })
 
@@ -58,7 +59,7 @@ export class ToastState {
 
   // Selectors
   @Selector()
-  static toasts(state: ToastStateModel): string[] {
+  static toasts(state: ToastStateModel): Toast[] {
     return state.toasts;
   }
 }

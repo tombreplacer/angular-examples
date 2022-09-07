@@ -6,7 +6,7 @@ import { Todo } from '../models/todo';
 
 @Injectable()
 export class TodoService {
-  private todosUrl = 'http://localhost:8080/todo';  // URL to web api
+  private todosUrl = 'http://localhost:8080/api/todo';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

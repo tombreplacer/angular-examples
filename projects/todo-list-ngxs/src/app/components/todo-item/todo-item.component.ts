@@ -3,7 +3,7 @@ import { Todo } from '../../models/todo';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { TodoService } from '../../services/todo.service';
 import { Store } from '@ngxs/store';
-import { DeleteTodo } from '../../store/todo.state';
+import { DeleteTodo, UpdateTodo } from '../../store/todo.state';
 
 @Component({
   selector: 'app-todo-item',
@@ -17,7 +17,7 @@ export class TodoItemComponent implements OnInit {
   @Input()
   todo: Todo;
 
-  constructor(private todoService: TodoService, private store: Store) { }
+  constructor(private store: Store) { }
 
   ngOnInit(): void {
 
@@ -25,7 +25,7 @@ export class TodoItemComponent implements OnInit {
 
   toggleCompleted(event: any) {
     this.todo.isCompleted = event.target.checked;
-    this.todoService.update(this.todo).subscribe();
+    this.store.dispatch(new UpdateTodo(this.todo, { isCompleted: this.todo.isCompleted }))
   }
 
   delete() {

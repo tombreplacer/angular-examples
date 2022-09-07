@@ -9,7 +9,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TodoItemComponent } from './components/todo-item/todo-item.component';
 import { TodoListComponent } from './components/todo-list/todo-list.component';
-import { InMemoryDataService } from './services/in-memory-data.service';
 import { TodoService } from './services/todo.service';
 import { TodoToastComponent } from './components/todo-toast/todo-toast.component';
 import { TodoState } from './store/todo.state';

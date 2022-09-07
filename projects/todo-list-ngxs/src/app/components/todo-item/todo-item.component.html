@@ -2,7 +2,8 @@
   class="list-group-item d-flex justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom rounded-0 mb-2">
   <div class="d-flex align-items-center">
     <input [checked]="todo.isCompleted" (change)="toggleCompleted($event)" class="form-check-input me-2" type="checkbox" value="" aria-label="..." />
-    <span [class.todo-completed]="todo.isCompleted">{{todo.title}}</span>
+    <span [class.todo-completed]="todo.isCompleted">[{{todo.date | date: "dd.MM.yyyy hh:mm"}}]</span>&nbsp;
+    <span class="bold" [class.todo-completed]="todo.isCompleted">{{todo.title}}</span>
   </div>
   <fa-icon (click)="delete()" [icon]="faTrash" class="delete-btn"></fa-icon>
 </li>

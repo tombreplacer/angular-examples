@@ -6,6 +6,7 @@ import { AddTodo, DeleteTodo, ListTodos, TodoState } from '../../store/todo.stat
 import { Select, Store } from '@ngxs/store';
 import { Observable, forkJoin, tap, mergeMap, switchMap, mergeAll, from, of, map, debounce, debounceTime } from 'rxjs';
 import { AddToast, ToastState } from '../../store/toast.state';
+import { Toast } from '../../models/toast';
 
 @Component({
   selector: 'app-todo-list',
@@ -21,7 +22,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
   public isLoading$!: Observable<boolean>;
 
   @Select(ToastState.toasts)
-  public toasts$!: Observable<string>;
+  public toasts$!: Observable<Toast[]>;
 
   todos: Todo[];
 
@@ -48,7 +49,7 @@ export class TodoListComponent implements OnInit, OnDestroy {
     if (!this.newTodo) {
       return;
     }
-    this.store.dispatch(new AddTodo({id: 0, isCompleted: false, title: this.newTodo }));
+    this.store.dispatch(new AddTodo({id: 0, isCompleted: false, title: this.newTodo, date: new Date() }));
     this.newTodo = '';
   }
 
