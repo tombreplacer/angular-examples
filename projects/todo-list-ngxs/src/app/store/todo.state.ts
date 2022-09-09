@@ -48,8 +48,6 @@ export interface TodoStateModel {
     todos: [] as Todo[]
   }
 })
-
-
 @Injectable()
 export class TodoState {
   constructor(private todoService: TodoService, private store: Store) { }
