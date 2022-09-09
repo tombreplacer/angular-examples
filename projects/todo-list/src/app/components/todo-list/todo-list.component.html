@@ -16,7 +16,8 @@
             </div>
 
             <ul class="list-group mb-0">
-              <app-todo-item *ngFor="let item of todos" (todoRemoved)="onDeleted($event)" [todo]="item"></app-todo-item>
+              <!-- <app-todo-item *ngFor="let item of todos" (todoRemoved)="onDeleted($event)" [todo]="item"></app-todo-item> -->
+              <app-todo-item *ngFor="let item of todoService.todos$ | async" (todoRemoved)="onDeleted($event)" [todo]="item"></app-todo-item>
             </ul>
           </div>
 
