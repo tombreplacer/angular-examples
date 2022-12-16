@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -16,6 +16,7 @@ import { NgxsModule } from '@ngxs/store'
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { environment } from '../environments/environment';
 import { ToastState } from './store/toast.state';
+import { ExampleInterceptor } from './misc/http.interceptor';
 
 
 @NgModule({
@@ -36,7 +37,13 @@ import { ToastState } from './store/toast.state';
     NgxsModule.forFeature([ToastState]),
     NgxsReduxDevtoolsPluginModule.forRoot()
   ],
-  providers: [TodoService],
+  providers: [
+    TodoService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ExampleInterceptor,
+      multi: true,
+    },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

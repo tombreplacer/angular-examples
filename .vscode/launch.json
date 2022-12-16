@@ -8,7 +8,7 @@
       "type": "chrome",
       "request": "attach",
       "port": 9222,
-      "url": "http://127.0.0.1:4200/",
+      "url": "http://localhost:4200/",
       "webRoot": "${workspaceRoot}"
     },
     {
